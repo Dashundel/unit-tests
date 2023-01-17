@@ -1,4 +1,3 @@
-import org.assertj.core.api.Assertions;
 
 import static org.assertj.core.api.Assertions.*;
 // < ---------- Не забудьте добавить библиотеку libs/assertj-core-3.23.1.jar - add as Library...
@@ -39,36 +38,48 @@ public class CalculatorTest {
         assert 2 == Calculator.calculation(100, 50, '/');
 
         // Проверка базового функционала с целыми числами, с использованием утверждений AssertJ:
-        Assertions.assertThat(Calculator.calculation(2, 6, '+')).isEqualTo(8);
-        Assertions.assertThat(Calculator.calculation(2, 2, '-')).isEqualTo(0);
-        Assertions.assertThat(Calculator.calculation(2, 7, '*')).isEqualTo(14);
-        Assertions.assertThat(Calculator.calculation(100, 50, '/')).isEqualTo(2);
+        assertThat(Calculator.calculation(2, 6, '+')).isEqualTo(8);
+        assertThat(Calculator.calculation(2, 2, '-')).isEqualTo(0);
+        assertThat(Calculator.calculation(2, 7, '*')).isEqualTo(14);
+        assertThat(Calculator.calculation(100, 50, '/')).isEqualTo(2);
+
 
         // Положительные проверки вычисления скидки
-        Assertions.assertThat(Calculator.calculatingDiscount(1000, 1)).isEqualTo(990);
-        Assertions.assertThat(Calculator.calculatingDiscount(100, 10)).isEqualTo(90);
-        Assertions.assertThat(Calculator.calculatingDiscount(100, 99)).isEqualTo(1);
-        Assertions.assertThat(Calculator.calculatingDiscount(2.2, 6)).isEqualTo(2.068);
+        assertThat(Calculator.calculatingDiscount(1000, 1)).isEqualTo(990);
+        assertThat(Calculator.calculatingDiscount(100, 10)).isEqualTo(90);
+        assertThat(Calculator.calculatingDiscount(100, 99)).isEqualTo(1);
+        assertThat(Calculator.calculatingDiscount(2.2, 6)).isEqualTo(2.068);
 
         // Проверка вычисления отрицательного числа, 0, дробей, процентов >=100%
-        Assertions.assertThatThrownBy(() ->
-                Calculator.calculatingDiscount(-2.0, 6)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() ->
+                Calculator.calculatingDiscount(-2.0, 6)
+                ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Сумма покупки не может быть отрицательной");
 
-        Assertions.assertThatThrownBy(() ->
-                Calculator.calculatingDiscount(2.0, -6)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() ->
+                Calculator.calculatingDiscount(2.0, -6)
+                ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Скидка не может быть отрицательной");
 
+        assertThatThrownBy(() ->
+                Calculator.calculatingDiscount(2.0, 0)
+                ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Скидка не может быть 0");
 
-        Assertions.assertThatThrownBy(() ->
-                Calculator.calculatingDiscount(2.0, 0)).isInstanceOf(ArithmeticException.class);
+        assertThatThrownBy(() ->
+                Calculator.calculatingDiscount(0.0, 6)
+                ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Сумма покупки не может быть 0");
 
-        Assertions.assertThatThrownBy(() ->
-                Calculator.calculatingDiscount(0.0, 6)).isInstanceOf(NullPointerException.class);
+        assertThatThrownBy(() ->
+                Calculator.calculatingDiscount(100, 101)
+                ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Скидка больше 100 %");
 
-        Assertions.assertThatThrownBy(() ->
-                Calculator.calculatingDiscount(100, 101)).isInstanceOf(ArithmeticException.class);
-
-        Assertions.assertThatThrownBy(() ->
-                Calculator.calculatingDiscount(100, 100)).isInstanceOf(ArithmeticException.class);
+        assertThatThrownBy(() ->
+                Calculator.calculatingDiscount(100, 100)
+                ).isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Скидка 100 %");
 
 
 //        // Проверка ожидаемого исключения, с использованием утверждений AssertJ:
